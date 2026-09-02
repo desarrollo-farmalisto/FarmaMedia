@@ -53,8 +53,8 @@
                 </div>
 
                 <div class="form-group <?= isset($errors['archivo']) ? 'has-error' : '' ?>" id="file-group" style="display:none">
-                    <label for="archivo" id="file-label">Archivo</label>
-                    <input type="file" id="archivo" name="archivo" class="form-input form-input-file">
+                    <label for="archivo" id="file-label">Archivos</label>
+                    <input type="file" id="archivo" name="archivo[]" class="form-input form-input-file" multiple>
                     <small class="field-hint" id="file-hint"></small>
                     <?php if (isset($errors['archivo'])): ?>
                         <span class="field-error"><?= $errors['archivo'] ?></span>

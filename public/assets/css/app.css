@@ -535,7 +535,7 @@ select.form-input { appearance: none; background-image: url("data:image/svg+xml,
     border: 1px solid rgba(0,75,86,.08);
     overflow: hidden;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     transition: box-shadow .25s, transform .25s;
 }
 
@@ -545,7 +545,7 @@ select.form-input { appearance: none; background-image: url("data:image/svg+xml,
 }
 
 .pub-card-header {
-    padding: 1.1rem 1.25rem .6rem;
+    padding: 1rem 1.25rem .5rem;
     display: flex;
     flex-direction: column;
     gap: .4rem;
@@ -562,10 +562,24 @@ select.form-input { appearance: none; background-image: url("data:image/svg+xml,
 /* Media */
 .pub-media {
     position: relative;
-    width: 100%;
-    aspect-ratio: 16/9;
+    flex-shrink: 0;
+    width: 220px;
+    height: 100%;
+    min-height: 160px;
     background: rgba(0,75,86,.05);
     overflow: hidden;
+}
+
+.pub-card-body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+}
+
+@media (max-width: 576px) {
+    .pub-card { flex-direction: column; }
+    .pub-media { width: 100%; min-height: 160px; }
 }
 
 .pub-video,
@@ -689,3 +703,11 @@ select.form-input { appearance: none; background-image: url("data:image/svg+xml,
     text-decoration: none;
 }
 .nav-logout:hover { color: var(--highlight); }
+
+/* Fecha publicación */
+.pub-date {
+    display: block;
+    color: var(--muted);
+    font-size: .8rem;
+    margin-top: .25rem;
+}

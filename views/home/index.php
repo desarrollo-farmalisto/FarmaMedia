@@ -38,14 +38,8 @@
                         $isVideo = in_array($ext, ['mp4','webm','mov','avi']);
                         $isImg   = in_array($ext, ['jpg','jpeg','png','webp','svg','gif']);
                     ?>
-                    <div class="col-12 col-sm-6 col-xl-4">
+                    <div class="col-12">
                         <article class="pub-card" id="recurso-<?= $r['id'] ?>">
-
-                            <!-- Título -->
-                            <div class="pub-card-header">
-                                <span class="badge-type"><?= htmlspecialchars($r['tipo']) ?></span>
-                                <h3 class="pub-title"><?= htmlspecialchars($r['nombre']) ?></h3>
-                            </div>
 
                             <!-- Media -->
                             <div class="pub-media">
@@ -60,6 +54,14 @@
                                         <span><?= strtoupper($ext) ?></span>
                                     </div>
                                 <?php endif; ?>
+                            </div>
+
+                            <div class="pub-card-body">
+                            <!-- Título -->
+                            <div class="pub-card-header">
+                                <span class="badge-type"><?= htmlspecialchars($r['tipo']) ?></span>
+                                <h3 class="pub-title"><?= htmlspecialchars($r['nombre']) ?></h3>
+                                <small class="pub-date"><i class="bi bi-calendar3"></i> <?= date('d \d\e F \d\e Y', strtotime($r['created_at'])) ?></small>
                             </div>
 
                             <!-- Descripción -->
@@ -83,6 +85,7 @@
                                     </button>
                                 </form>
                             </div>
+                            </div>
 
                         </article>
                     </div>
@@ -96,23 +99,20 @@
 </main>
 
 <script>
-const PREVIEW_DURATION = 4;
-const PREVIEW_INTERVAL = 8;
-
 document.querySelectorAll('video[data-preview]').forEach(video => {
-    let stopTimer;
+    const playIcon = video.parentElement.querySelector('.pub-play-icon');
 
-    const startCycle = () => {
-        video.currentTime = 0;
-        video.play();
-        stopTimer = setTimeout(() => {
+    video.addEventListener('click', () => {
+        if (video.paused) {
+            video.play();
+            if (playIcon) playIcon.style.opacity = '0';
+        } else {
             video.pause();
-            video.currentTime = 0;
-        }, PREVIEW_DURATION * 1000);
-    };
+            if (playIcon) playIcon.style.opacity = '1';
+        }
+    });
 
-    startCycle();
-    setInterval(startCycle, PREVIEW_INTERVAL * 1000);
+    video.style.cursor = 'pointer';
 });
 </script>
 

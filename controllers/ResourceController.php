@@ -25,26 +25,29 @@ final class ResourceController //
     public function store(): void
     {
         $data   = $this->sanitize($_POST);
-        $errors = $this->validate($data, $_FILES['archivo'] ?? null);
+        $files  = $this->normalizeFiles($_FILES['archivo'] ?? []);
+        $errors = $this->validate($data, $files);
 
         if ($errors) {
             view('admin/recursos/create', ['pageTitle' => 'Nuevo recurso', 'errors' => $errors, 'old' => $data]);
             return;
         }
 
-        $filePath = $this->handleUpload($_FILES['archivo'], $data['tipo']);
-
         $stmt = $this->db->prepare(
             'INSERT INTO fm_recursos (nombre, descripcion, tipo, archivo, link, created_at)
              VALUES (:nombre, :descripcion, :tipo, :archivo, :link, NOW())'
         );
-        $stmt->execute([
-            ':nombre'      => $data['nombre'],
-            ':descripcion' => $data['descripcion'],
-            ':tipo'        => $data['tipo'],
-            ':archivo'     => $filePath,
-            ':link'        => $data['link'],
-        ]);
+
+        foreach ($files as $file) {
+            $filePath = $this->handleUpload($file, $data['tipo']);
+            $stmt->execute([
+                ':nombre'      => $data['nombre'],
+                ':descripcion' => $data['descripcion'],
+                ':tipo'        => $data['tipo'],
+                ':archivo'     => $filePath,
+                ':link'        => $data['link'],
+            ]);
+        }
 
         header('Location: ' . APP_URL . '/admin/recursos');
         exit;
@@ -123,6 +126,21 @@ final class ResourceController //
 
     // ── Helpers ──────────────────────────────────────────
 
+    private function normalizeFiles(array $files): array
+    {
+        if (empty($files['name'])) return [];
+        $result = [];
+        $names = is_array($files['name']) ? $files['name'] : [$files['name']];
+        $tmps  = is_array($files['tmp_name']) ? $files['tmp_name'] : [$files['tmp_name']];
+        $errs  = is_array($files['error']) ? $files['error'] : [$files['error']];
+        foreach ($names as $i => $name) {
+            if ($errs[$i] !== UPLOAD_ERR_NO_FILE && $name !== '') {
+                $result[] = ['name' => $name, 'tmp_name' => $tmps[$i], 'error' => $errs[$i]];
+            }
+        }
+        return $result;
+    }
+
     private function findOrFail(string $id): array
     {
         $stmt = $this->db->prepare('SELECT * FROM fm_recursos WHERE id = :id');
@@ -146,7 +164,7 @@ final class ResourceController //
         ];
     }
 
-    private function validate(array $data, ?array $file, bool $editing = false): array
+    private function validate(array $data, array $files, bool $editing = false): array
     {
         $errors = [];
 
@@ -154,13 +172,16 @@ final class ResourceController //
         if ($data['descripcion'] === '') $errors['descripcion'] = 'La descripción es obligatoria.';
         if (!array_key_exists($data['tipo'], ALLOWED_EXTENSIONS)) $errors['tipo'] = 'Selecciona un tipo válido.';
 
-        if (!$editing && (empty($file['name']) || $file['error'] === UPLOAD_ERR_NO_FILE)) {
-            $errors['archivo'] = 'Debes subir un archivo.';
-        } elseif (!empty($file['name']) && $file['error'] !== UPLOAD_ERR_NO_FILE) {
-            $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+        if (!$editing && empty($files)) {
+            $errors['archivo'] = 'Debes subir al menos un archivo.';
+        } else {
             $allowed = ALLOWED_EXTENSIONS[$data['tipo']] ?? [];
-            if (!in_array($ext, $allowed, true)) {
-                $errors['archivo'] = 'Extensión no permitida para este tipo. Permitidas: ' . implode(', ', $allowed);
+            foreach ($files as $file) {
+                $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+                if (!in_array($ext, $allowed, true)) {
+                    $errors['archivo'] = 'Extensión no permitida. Permitidas: ' . implode(', ', $allowed);
+                    break;
+                }
             }
         }
 

@@ -1,12 +1,12 @@
 // FarmaMedia · app.js
 
 const tipoConfig = {
-    imagen:    { label: 'Imagen',    hint: 'Permitido: jpg, jpeg, png, gif, webp, svg', accept: '.jpg,.jpeg,.png,.gif,.webp,.svg' },
-    video:     { label: 'Video',     hint: 'Permitido: mp4, webm, mov, avi',            accept: '.mp4,.webm,.mov,.avi' },
-    gif:       { label: 'GIF',       hint: 'Permitido: gif',                            accept: '.gif' },
-    audio:     { label: 'Audio',     hint: 'Permitido: mp3, wav, ogg',                  accept: '.mp3,.wav,.ogg' },
-    documento: { label: 'Documento', hint: 'Permitido: pdf, doc, docx, ppt, pptx, xls, xlsx', accept: '.pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx' },
-    otro:      { label: 'Archivo',   hint: 'Permitido: zip, rar',                       accept: '.zip,.rar' },
+    imagen:    { label: 'Imágenes',   hint: 'Permitido: jpg, jpeg, png, gif, webp, svg · Puedes seleccionar varios archivos', accept: '.jpg,.jpeg,.png,.gif,.webp,.svg' },
+    video:     { label: 'Videos',     hint: 'Permitido: mp4, webm, mov, avi · Puedes seleccionar varios archivos',            accept: '.mp4,.webm,.mov,.avi' },
+    gif:       { label: 'GIFs',       hint: 'Permitido: gif · Puedes seleccionar varios archivos',                            accept: '.gif' },
+    audio:     { label: 'Audios',     hint: 'Permitido: mp3, wav, ogg · Puedes seleccionar varios archivos',                  accept: '.mp3,.wav,.ogg' },
+    documento: { label: 'Documentos', hint: 'Permitido: pdf, doc, docx, ppt, pptx, xls, xlsx · Puedes seleccionar varios archivos', accept: '.pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx' },
+    otro:      { label: 'Archivos',   hint: 'Permitido: zip, rar · Puedes seleccionar varios archivos',                       accept: '.zip,.rar' },
 };
 
 const tipoSelect = document.getElementById('tipo');
