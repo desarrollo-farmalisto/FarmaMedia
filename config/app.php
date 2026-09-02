@@ -46,16 +46,3 @@ function view(string $template, array $data = []): void
     extract($data, EXTR_SKIP);
     require APP_ROOT . '/views/' . $template . '.php';
 }
-
-function auth(): void
-{
-    if (empty($_SESSION['user_email'])) {
-        header('Location: ' . APP_URL . '/login');
-        exit;
-    }
-}
-
-function isAdmin(): bool
-{
-    return ($_SESSION['user_rol'] ?? '') === 'admin';
-}
