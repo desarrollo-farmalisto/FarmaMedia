@@ -7,7 +7,7 @@ const APP_NAME = 'Farmalisto';//
 // Local URL
 // const APP_URL  = 'http://farmamedia.test';
 // Production URL
-const APP_URL  = 'https://farmalisto.farmamedia.com.co';
+const APP_URL = 'https://farmamedia.farmalisto.com.co';
 const APP_ROOT = __DIR__ . '/..';
 
 // Local Database Configuration
