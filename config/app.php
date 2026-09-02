@@ -17,7 +17,7 @@ const APP_ROOT = __DIR__ . '/..';
 // const DB_PASS = '';
 
 // Production Database Configuration
-const DB_HOST = 'localhost';
+const DB_HOST = '127.0.0.1';
 const DB_PORT = '3828';
 const DB_NAME = 'farmamedia';
 const DB_USER = 'osvaleroh';
