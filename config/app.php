@@ -16,6 +16,15 @@ const APP_ROOT = __DIR__ . '/..';
 // const DB_USER = 'root';
 // const DB_PASS = '';
 
+// Production Database Configuration
+const DB_HOST = 'localhost';
+const DB_PORT = '3828';
+const DB_NAME = 'farmamedia';
+const DB_USER = 'osvaleroh';
+const DB_PASS = 'KJgH5UWmjFhEr5Dp';
+
+
+
 const UPLOAD_PATH = APP_ROOT . '/public/uploads';
 const UPLOAD_URL  = APP_URL  . '/public/uploads';
 
