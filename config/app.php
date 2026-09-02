@@ -11,18 +11,10 @@ const APP_URL  = 'https://farmalisto.farmamedia.com.co';
 const APP_ROOT = __DIR__ . '/..';
 
 // Local Database Configuration
-const DB_HOST = 'localhost';
-const DB_NAME = 'farmamedia';
-const DB_USER = 'root';
-const DB_PASS = '';
-
-// Production Database Configuration
 // const DB_HOST = 'localhost';
 // const DB_NAME = 'farmamedia';
 // const DB_USER = 'root';
 // const DB_PASS = '';
-
-
 
 const UPLOAD_PATH = APP_ROOT . '/public/uploads';
 const UPLOAD_URL  = APP_URL  . '/public/uploads';
