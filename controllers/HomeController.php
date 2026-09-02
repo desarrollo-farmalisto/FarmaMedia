@@ -6,7 +6,6 @@ final class HomeController //
 {
     public function index(): void
     {
-        auth();
         $db       = Database::connect();
         $recursos = $db->query('SELECT * FROM fm_recursos WHERE status = 1 ORDER BY created_at DESC')->fetchAll();
 

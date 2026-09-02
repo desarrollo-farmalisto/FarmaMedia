@@ -13,6 +13,6 @@
     <link href="<?= APP_URL ?>/public/assets/css/app.css" rel="stylesheet">
 </head>
 <body>
-<header class="site-header"><div class="container d-flex align-items-center justify-content-between"><a class="brand" href="<?= APP_URL ?>/"><img src="<?= APP_URL ?>/public/images/logo--horizontal.png" alt="FarmaMedia" class="brand-mark" style="width:10rem;height:auto;min-width:10rem;display:block;object-fit:contain;border-radius:.5rem;"></a><nav class="d-none d-md-flex align-items-center gap-4"><a href="<?= APP_URL ?>/">Recursos</a><?php if (isAdmin()): ?><a class="nav-admin" href="<?= APP_URL ?>/admin">Admin <i class="bi bi-arrow-up-right"></i></a><?php endif; ?><a href="<?= APP_URL ?>/logout" class="nav-logout" title="Cerrar sesión"><i class="bi bi-box-arrow-right"></i></a></nav><button class="mobile-menu d-md-none" type="button" aria-label="Abrir menú"><i class="bi bi-list"></i></button></div></header>
+<header class="site-header"><div class="container d-flex align-items-center justify-content-between"><a class="brand" href="<?= APP_URL ?>/recursos"><img src="<?= APP_URL ?>/public/images/logo--horizontal.png" alt="FarmaMedia" class="brand-mark" style="width:10rem;height:auto;min-width:10rem;display:block;object-fit:contain;border-radius:.5rem;"></a><button class="mobile-menu d-md-none" type="button" aria-label="Abrir menú"><i class="bi bi-list"></i></button></div></header>
 
     

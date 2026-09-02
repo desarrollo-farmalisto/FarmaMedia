@@ -8,15 +8,10 @@ require_once __DIR__ . '/core/Database.php';
 require_once __DIR__ . '/controllers/HomeController.php';
 require_once __DIR__ . '/controllers/AdminController.php';
 require_once __DIR__ . '/controllers/ResourceController.php';
-require_once __DIR__ . '/controllers/AuthController.php';
 
 $router = new Router();
 
-$router->get('/login',  [AuthController::class, 'showLogin']);
-$router->post('/login', [AuthController::class, 'login']);
-$router->get('/logout', [AuthController::class, 'logout']);
-
-$router->get('/',  [HomeController::class, 'index']);
+$router->get('/recursos',  [HomeController::class, 'index']);
 $router->post('/recursos/{id}/comentar', [ResourceController::class, 'comment']);
 $router->get('/admin', [AdminController::class, 'index']);
 $router->get('/admin/recursos/{id}/comentarios', [AdminController::class, 'comments']);

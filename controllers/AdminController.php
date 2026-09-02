@@ -6,11 +6,6 @@ final class AdminController //
 {
     public function index(): void
     {
-        auth();
-        if (!isAdmin()) {
-            header('Location: ' . APP_URL . '/');
-            exit;
-        }
         $db = Database::connect();
 
         $total     = $db->query('SELECT COUNT(*) FROM fm_recursos')->fetchColumn();

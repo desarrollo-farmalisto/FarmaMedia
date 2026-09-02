@@ -117,7 +117,7 @@ final class ResourceController //
             $stmt->execute([':description' => $description, ':recurso_id' => $id]);
         }
 
-        header('Location: ' . APP_URL . '/#recurso-' . $id);
+        header('Location: ' . APP_URL . '/recursos#recurso-' . $id);
         exit;
     }
 

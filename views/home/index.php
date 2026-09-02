@@ -9,9 +9,6 @@
                 <div class="col-lg-8">
                     <p class="eyebrow">Biblioteca creativa · 2026</p>
                     <h1>Recursos que<br><span>se hacen notar.</span></h1>
-                    <?php if (isAdmin()): ?>
-                    <a class="btn btn-coral" href="<?= APP_URL ?>/admin">Entrar al panel <i class="bi bi-arrow-up-right"></i></a>
-                    <?php endif; ?>
                 </div>
             </div>
         </div>
