@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-final class ResourceController
+final class ResourceController //
 {
     private PDO $db;
 

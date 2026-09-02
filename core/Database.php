@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-final class Database
+final class Database //
 {
     private static ?PDO $instance = null;
 

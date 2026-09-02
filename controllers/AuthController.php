@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-final class AuthController
+final class AuthController//
 {
     public function showLogin(): void
     {

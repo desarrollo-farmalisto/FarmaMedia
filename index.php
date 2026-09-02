@@ -29,3 +29,4 @@ $router->post('/admin/recursos/{id}/editar', [ResourceController::class, 'update
 $router->post('/admin/recursos/{id}/borrar', [ResourceController::class, 'destroy']);
 
 $router->dispatch(parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH));
+

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-final class Router
+final class Router //
 {
     private array $routes = [];
 

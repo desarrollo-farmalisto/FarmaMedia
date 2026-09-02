@@ -9,6 +9,7 @@
     --font-head: 'Space Grotesk', sans-serif;
 }
 
+
 /* ── Base ──────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; }
 

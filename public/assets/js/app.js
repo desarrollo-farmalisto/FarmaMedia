@@ -15,6 +15,7 @@ const fileLabel  = document.getElementById('file-label');
 const fileInput  = document.getElementById('archivo');
 const fileHint   = document.getElementById('file-hint');
 
+
 if (tipoSelect) {
     const updateFileInput = (val) => {
         if (!val || !tipoConfig[val]) {

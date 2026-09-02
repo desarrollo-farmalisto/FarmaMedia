@@ -118,7 +118,7 @@
 <div class="login-wrap">
     <div class="login-card">
 
-        <img src="<?= APP_URL ?>/public/images/logo-horizontal.png" alt="<?= APP_NAME ?>" class="login-logo">
+        <img src="<?= APP_URL ?>/public/images/logo--horizontal.png" alt="<?= APP_NAME ?>" class="login-logo">
 
         <h1 class="login-title">Bienvenido</h1>
         <p class="login-sub">Ingresa tu correo para acceder.</p>
@@ -148,6 +148,5 @@
     </div>
     <p class="login-footer">&copy; <?= date('Y') ?> <?= APP_NAME ?>. Todos los derechos reservados.</p>
 </div>
-
 </body>
 </html>

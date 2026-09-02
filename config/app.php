@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-const APP_NAME = 'Farmalisto';
+const APP_NAME = 'Farmalisto';//
 
 // Local URL
 // const APP_URL  = 'http://farmamedia.test';

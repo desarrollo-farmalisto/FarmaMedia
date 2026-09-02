@@ -12,6 +12,7 @@
                 <i class="bi bi-arrow-left"></i> Volver
             </a>
         </div>
+        
 
         <div class="form-card">
             <form method="POST" action="<?= APP_URL ?>/admin/recursos/<?= $recurso['id'] ?>/editar" enctype="multipart/form-data" novalidate>

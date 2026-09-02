@@ -13,7 +13,6 @@
                     <a class="btn btn-coral" href="<?= APP_URL ?>/admin">Entrar al panel <i class="bi bi-arrow-up-right"></i></a>
                     <?php endif; ?>
                 </div>
-
             </div>
         </div>
     </section>

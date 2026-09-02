@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-final class HomeController
+final class HomeController //
 {
     public function index(): void
     {

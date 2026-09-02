@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-final class AdminController
+final class AdminController //
 {
     public function index(): void
     {
