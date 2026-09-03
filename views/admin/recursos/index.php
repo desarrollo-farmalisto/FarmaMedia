@@ -63,8 +63,8 @@
                                 <?php endif; ?>
                             </div>
                         </td>
-                        <td><strong><?= htmlspecialchars($r['nombre']) ?></strong></td>
-                        <td class="desc-cell"><?= htmlspecialchars($r['descripcion']) ?></td>
+                        <td><strong><?= htmlspecialchars($r['nombre'] ?? '—') ?></strong></td>
+                        <td class="desc-cell"><?= htmlspecialchars($r['descripcion'] ?? '') ?></td>
                         <td><span class="badge-type"><?= htmlspecialchars($r['tipo']) ?></span></td>
                         <td>
                             <?php if ($r['link']): ?>

@@ -51,14 +51,14 @@
                 </div>
 
                 <div class="form-group <?= isset($errors['archivo']) ? 'has-error' : '' ?>" id="file-group">
-                    <label for="archivo" id="file-label">Reemplazar archivo <span class="optional">(opcional)</span></label>
-                    <?php if ($recurso['archivo']): ?>
+                    <label for="archivo" id="file-label">Reemplazar archivos <span class="optional">(opcional)</span></label>
+                    <?php if (!empty($archivos)): ?>
                         <div class="current-file">
                             <i class="bi bi-paperclip"></i>
-                            Archivo actual: <strong><?= htmlspecialchars($recurso['archivo']) ?></strong>
+                            <?= count($archivos) ?> archivo(s) actual(es)
                         </div>
                     <?php endif; ?>
-                    <input type="file" id="archivo" name="archivo" class="form-input form-input-file">
+                    <input type="file" id="archivo" name="archivo[]" class="form-input form-input-file" multiple>
                     <small class="field-hint" id="file-hint"></small>
                     <?php if (isset($errors['archivo'])): ?>
                         <span class="field-error"><?= $errors['archivo'] ?></span>

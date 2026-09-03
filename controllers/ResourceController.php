@@ -13,7 +13,12 @@ final class ResourceController //
 
     public function index(): void
     {
-        $recursos = $this->db->query('SELECT * FROM fm_recursos ORDER BY created_at DESC')->fetchAll();
+        $recursos = $this->db->query(
+            'SELECT r.*, a.nombre, a.descripcion, a.archivo, a.link
+             FROM fm_recursos r
+             LEFT JOIN fm_archivos a ON a.id = (SELECT id FROM fm_archivos WHERE recurso_id = r.id ORDER BY id ASC LIMIT 1)
+             ORDER BY r.created_at DESC'
+        )->fetchAll();
         view('admin/recursos/index', ['pageTitle' => 'Recursos', 'recursos' => $recursos]);
     }
 
@@ -24,24 +29,32 @@ final class ResourceController //
 
     public function store(): void
     {
-        $data         = $this->sanitize($_POST);
-        $files        = $this->normalizeFiles($_FILES['archivo'] ?? []);
-        $errors       = $this->validate($data, $files);
-        $modoCuaderno = isset($_POST['modo_cuaderno']) ? 1 : 0;
-        $ordenes      = $_POST['orden'] ?? [];
+        $data           = $this->sanitize($_POST);
+        $files          = $this->normalizeFiles($_FILES['archivo'] ?? []);
+        $errors         = $this->validate($data, $files);
+        $modoCuaderno   = isset($_POST['modo_cuaderno']) ? 1 : 0;
+        $ordenes        = $_POST['orden'] ?? [];
         $infoIndividual = (int)($_POST['info_individual'] ?? 0);
-        $titulos      = $_POST['titulo_individual'] ?? [];
-        $descripciones = $_POST['descripcion_individual'] ?? [];
-        $links        = $_POST['link_individual'] ?? [];
+        $titulos        = $_POST['titulo_individual'] ?? [];
+        $descripciones  = $_POST['descripcion_individual'] ?? [];
+        $links          = $_POST['link_individual'] ?? [];
 
         if ($errors) {
             view('admin/recursos/create', ['pageTitle' => 'Nuevo recurso', 'errors' => $errors, 'old' => $data]);
             return;
         }
 
+        // Crear el recurso contenedor
         $stmt = $this->db->prepare(
-            'INSERT INTO fm_recursos (nombre, descripcion, tipo, archivo, link, modo_cuaderno, orden, created_at)
-             VALUES (:nombre, :descripcion, :tipo, :archivo, :link, :modo_cuaderno, :orden, NOW())'
+            'INSERT INTO fm_recursos (tipo, modo_cuaderno, status, created_at) VALUES (:tipo, :modo_cuaderno, 1, NOW())'
+        );
+        $stmt->execute([':tipo' => $data['tipo'], ':modo_cuaderno' => $modoCuaderno]);
+        $recursoId = (int)$this->db->lastInsertId();
+
+        // Insertar cada archivo
+        $stmtA = $this->db->prepare(
+            'INSERT INTO fm_archivos (recurso_id, nombre, descripcion, archivo, link, orden)
+             VALUES (:recurso_id, :nombre, :descripcion, :archivo, :link, :orden)'
         );
 
         foreach ($files as $i => $file) {
@@ -58,14 +71,13 @@ final class ResourceController //
                 $link        = $data['link'];
             }
 
-            $stmt->execute([
-                ':nombre'        => $nombre,
-                ':descripcion'   => $descripcion,
-                ':tipo'          => $data['tipo'],
-                ':archivo'       => $filePath,
-                ':link'          => $link,
-                ':modo_cuaderno' => $modoCuaderno,
-                ':orden'         => $orden,
+            $stmtA->execute([
+                ':recurso_id'  => $recursoId,
+                ':nombre'      => $nombre,
+                ':descripcion' => $descripcion,
+                ':archivo'     => $filePath,
+                ':link'        => $link,
+                ':orden'       => $orden,
             ]);
         }
 
@@ -75,38 +87,78 @@ final class ResourceController //
 
     public function edit(string $id): void
     {
-        $recurso = $this->findOrFail($id);
-        view('admin/recursos/edit', ['pageTitle' => 'Editar recurso', 'recurso' => $recurso, 'errors' => [], 'old' => $recurso]);
+        $recurso  = $this->findOrFail($id);
+        $archivos = $this->db->prepare('SELECT * FROM fm_archivos WHERE recurso_id = :id ORDER BY orden ASC, id ASC');
+        $archivos->execute([':id' => $id]);
+        $archivos = $archivos->fetchAll();
+
+        view('admin/recursos/edit', [
+            'pageTitle' => 'Editar recurso',
+            'recurso'   => $recurso,
+            'archivos'  => $archivos,
+            'errors'    => [],
+            'old'       => array_merge($recurso, $archivos[0] ?? []),
+        ]);
     }
 
     public function update(string $id): void
     {
-        $recurso = $this->findOrFail($id);
-        $data    = $this->sanitize($_POST);
-        $errors  = $this->validate($data, $_FILES['archivo'] ?? null, true);
+        $recurso  = $this->findOrFail($id);
+        $data     = $this->sanitize($_POST);
+        $files    = $this->normalizeFiles($_FILES['archivo'] ?? []);
+        $errors   = $this->validate($data, $files, true);
 
         if ($errors) {
-            view('admin/recursos/edit', ['pageTitle' => 'Editar recurso', 'recurso' => $recurso, 'errors' => $errors, 'old' => $data]);
+            $archivos = $this->db->prepare('SELECT * FROM fm_archivos WHERE recurso_id = :id ORDER BY orden ASC, id ASC');
+            $archivos->execute([':id' => $id]);
+            view('admin/recursos/edit', [
+                'pageTitle' => 'Editar recurso',
+                'recurso'   => $recurso,
+                'archivos'  => $archivos->fetchAll(),
+                'errors'    => $errors,
+                'old'       => $data,
+            ]);
             return;
         }
 
-        $filePath = $recurso['archivo'];
-        if (!empty($_FILES['archivo']['name'])) {
-            $filePath = $this->handleUpload($_FILES['archivo'], $data['tipo']);
-        }
+        $this->db->prepare('UPDATE fm_recursos SET tipo=:tipo WHERE id=:id')
+            ->execute([':tipo' => $data['tipo'], ':id' => $id]);
 
-        $stmt = $this->db->prepare(
-            'UPDATE fm_recursos SET nombre=:nombre, descripcion=:descripcion, tipo=:tipo, archivo=:archivo, link=:link
-             WHERE id=:id'
-        );
-        $stmt->execute([
-            ':nombre'      => $data['nombre'],
-            ':descripcion' => $data['descripcion'],
-            ':tipo'        => $data['tipo'],
-            ':archivo'     => $filePath,
-            ':link'        => $data['link'],
-            ':id'          => $id,
-        ]);
+        // Si se suben nuevos archivos, reemplazar todos
+        if (!empty($files)) {
+            $existing = $this->db->prepare('SELECT archivo FROM fm_archivos WHERE recurso_id = :id');
+            $existing->execute([':id' => $id]);
+            foreach ($existing->fetchAll() as $e) {
+                $full = APP_ROOT . '/public/uploads/' . $e['archivo'];
+                if ($e['archivo'] && file_exists($full)) unlink($full);
+            }
+            $this->db->prepare('DELETE FROM fm_archivos WHERE recurso_id = :id')->execute([':id' => $id]);
+
+            $stmtA = $this->db->prepare(
+                'INSERT INTO fm_archivos (recurso_id, nombre, descripcion, archivo, link, orden)
+                 VALUES (:recurso_id, :nombre, :descripcion, :archivo, :link, :orden)'
+            );
+            foreach ($files as $i => $file) {
+                $stmtA->execute([
+                    ':recurso_id'  => $id,
+                    ':nombre'      => $data['nombre'],
+                    ':descripcion' => $data['descripcion'],
+                    ':archivo'     => $this->handleUpload($file, $data['tipo']),
+                    ':link'        => $data['link'],
+                    ':orden'       => $i + 1,
+                ]);
+            }
+        } else {
+            // Solo actualizar nombre/descripcion/link del primer archivo
+            $this->db->prepare(
+                'UPDATE fm_archivos SET nombre=:nombre, descripcion=:descripcion, link=:link WHERE recurso_id=:id'
+            )->execute([
+                ':nombre'      => $data['nombre'],
+                ':descripcion' => $data['descripcion'],
+                ':link'        => $data['link'],
+                ':id'          => $id,
+            ]);
+        }
 
         header('Location: ' . APP_URL . '/admin/recursos');
         exit;
@@ -114,11 +166,13 @@ final class ResourceController //
 
     public function destroy(string $id): void
     {
-        $recurso = $this->findOrFail($id);
+        $this->findOrFail($id);
 
-        if ($recurso['archivo']) {
-            $full = APP_ROOT . '/public/uploads/' . $recurso['archivo'];
-            if (file_exists($full)) unlink($full);
+        $archivos = $this->db->prepare('SELECT archivo FROM fm_archivos WHERE recurso_id = :id');
+        $archivos->execute([':id' => $id]);
+        foreach ($archivos->fetchAll() as $a) {
+            $full = APP_ROOT . '/public/uploads/' . $a['archivo'];
+            if ($a['archivo'] && file_exists($full)) unlink($full);
         }
 
         $this->db->prepare('DELETE FROM fm_recursos WHERE id = :id')->execute([':id' => $id]);
@@ -193,7 +247,7 @@ final class ResourceController //
         if (!array_key_exists($data['tipo'], ALLOWED_EXTENSIONS)) $errors['tipo'] = 'Selecciona un tipo válido.';
 
         if (!$editing && empty($files)) {
-            $errors['archivo'] = 'No se recibieron archivos. Verifica que el archivo no supere el límite permitido por el servidor.';
+            $errors['archivo'] = 'Debes subir al menos un archivo.';
         } else {
             $allowed = ALLOWED_EXTENSIONS[$data['tipo']] ?? [];
             foreach ($files as $file) {

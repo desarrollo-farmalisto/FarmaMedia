@@ -17,10 +17,11 @@ final class AdminController //
         $totalPags = (int)ceil((int)$total / $porPagina);
 
         $ultimos = $db->query(
-            'SELECT r.*, COUNT(c.id) AS total_comentarios
+            'SELECT r.*, a.nombre, a.descripcion, a.archivo, a.link, COUNT(c.id) AS total_comentarios
              FROM fm_recursos r
+             LEFT JOIN fm_archivos a ON a.id = (SELECT id FROM fm_archivos WHERE recurso_id = r.id ORDER BY id ASC LIMIT 1)
              LEFT JOIN fm_comments c ON c.fm_recurso_id = r.id AND c.status = 1
-             GROUP BY r.id
+             GROUP BY r.id, a.nombre, a.descripcion, a.archivo, a.link
              ORDER BY r.created_at DESC
              LIMIT ' . $porPagina . ' OFFSET ' . $offset
         )->fetchAll();
