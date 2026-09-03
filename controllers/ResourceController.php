@@ -24,6 +24,7 @@ final class ResourceController //
 
     public function store(): void
     {
+        file_put_contents(APP_ROOT . '/store_debug.log', date('Y-m-d H:i:s') . PHP_EOL . 'POST: ' . print_r($_POST, true) . PHP_EOL . 'FILES: ' . print_r($_FILES, true) . PHP_EOL);
         $data         = $this->sanitize($_POST);
         $files        = $this->normalizeFiles($_FILES['archivo'] ?? []);
         $errors       = $this->validate($data, $files);
