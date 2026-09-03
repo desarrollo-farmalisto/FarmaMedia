@@ -10,15 +10,30 @@ final class AdminController //
 
         $total     = $db->query('SELECT COUNT(*) FROM fm_recursos')->fetchColumn();
         $recientes = $db->query('SELECT COUNT(*) FROM fm_recursos WHERE created_at >= DATE_SUB(NOW(), INTERVAL 7 DAY)')->fetchColumn();
-        $ultimos   = $db->query('SELECT * FROM fm_recursos ORDER BY created_at DESC LIMIT 5')->fetchAll();
+
+        $porPagina = 10;
+        $pagina    = max(1, (int)($_GET['pagina'] ?? 1));
+        $offset    = ($pagina - 1) * $porPagina;
+        $totalPags = (int)ceil((int)$total / $porPagina);
+
+        $ultimos = $db->query(
+            'SELECT r.*, COUNT(c.id) AS total_comentarios
+             FROM fm_recursos r
+             LEFT JOIN fm_comments c ON c.fm_recurso_id = r.id AND c.status = 1
+             GROUP BY r.id
+             ORDER BY r.created_at DESC
+             LIMIT ' . $porPagina . ' OFFSET ' . $offset
+        )->fetchAll();
 
         view('admin/index', [
-            'pageTitle' => 'Panel de control',
+            'pageTitle'  => 'Panel de control',
             'stats' => [
                 ['label' => 'Recursos publicados', 'value' => str_pad((string) $total,     2, '0', STR_PAD_LEFT), 'change' => 'Total'],
                 ['label' => 'Nuevos esta semana',  'value' => str_pad((string) $recientes, 2, '0', STR_PAD_LEFT), 'change' => 'Últimos 7 días'],
             ],
-            'ultimos' => $ultimos,
+            'ultimos'    => $ultimos,
+            'pagina'     => $pagina,
+            'totalPags'  => $totalPags,
         ]);
     }
 

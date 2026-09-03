@@ -86,12 +86,14 @@
                                 <a href="<?= APP_URL ?>/admin/recursos/<?= $r['id'] ?>/editar" class="btn-action btn-edit" title="Editar">
                                     <i class="bi bi-pencil"></i>
                                 </a>
+                                <?php if ((int)$r['total_comentarios'] > 0): ?>
                                 <button class="btn-action btn-comments" title="Comentarios"
                                     data-id="<?= $r['id'] ?>"
                                     data-nombre="<?= htmlspecialchars($r['nombre']) ?>"
                                     data-url="<?= APP_URL ?>/admin/recursos/<?= $r['id'] ?>/comentarios">
                                     <i class="bi bi-chat-dots"></i>
                                 </button>
+                                <?php endif; ?>
                                 <button class="btn-action btn-delete" title="Eliminar"
                                     data-id="<?= $r['id'] ?>"
                                     data-nombre="<?= htmlspecialchars($r['nombre']) ?>"
@@ -106,6 +108,15 @@
                 </tbody>
             </table>
         </div>
+
+        <!-- Paginación -->
+        <?php if ($totalPags > 1): ?>
+        <div class="d-flex justify-content-center gap-2 mt-4 mb-5">
+            <?php for ($i = 1; $i <= $totalPags; $i++): ?>
+                <a href="?pagina=<?= $i ?>" class="btn <?= $i === $pagina ? 'btn-coral' : 'btn-outline-admin' ?>"><?= $i ?></a>
+            <?php endfor; ?>
+        </div>
+        <?php endif; ?>
 
     </div>
 </main>

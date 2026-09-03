@@ -68,6 +68,33 @@
                            placeholder="https://...">
                 </div>
 
+                <!-- Modo cuaderno -->
+                <div class="form-group" id="cuaderno-group" style="display:none">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="form-check form-switch mb-0">
+                            <input class="form-check-input" type="checkbox" id="modo_cuaderno" name="modo_cuaderno" value="1" role="switch">
+                            <label class="form-check-label fw-600" for="modo_cuaderno">Modo cuaderno</label>
+                        </div>
+                    </div>
+                    <small id="cuaderno-msg" class="field-hint" style="display:none;color:var(--highlight)">No puedes activar esta funcionalidad sin tener recursos cargados.</small>
+                </div>
+
+                <!-- Lista de orden -->
+                <div id="orden-list" style="display:none">
+                    <p class="eyebrow mb-2">Asigna el orden de cada recurso</p>
+                    <div id="orden-items"></div>
+                </div>
+
+                <!-- Info individual -->
+                <div id="info-individual-group" style="display:none">
+                    <button type="button" id="btn-info-individual" class="btn-add-info">
+                        <span class="btn-add-info-icon"><i class="bi bi-plus-lg"></i></span>
+                        Agregar información a recursos
+                    </button>
+                    <input type="hidden" name="info_individual" id="info_individual" value="0">
+                    <div id="info-individual-list" style="display:none"></div>
+                </div>
+
                 <div class="form-actions">
                     <a href="<?= APP_URL ?>/admin/recursos" class="btn btn-outline-admin">Cancelar</a>
                     <button type="submit" class="btn btn-coral">

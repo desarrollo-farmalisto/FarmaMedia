@@ -24,9 +24,15 @@ final class ResourceController //
 
     public function store(): void
     {
-        $data   = $this->sanitize($_POST);
-        $files  = $this->normalizeFiles($_FILES['archivo'] ?? []);
-        $errors = $this->validate($data, $files);
+        $data         = $this->sanitize($_POST);
+        $files        = $this->normalizeFiles($_FILES['archivo'] ?? []);
+        $errors       = $this->validate($data, $files);
+        $modoCuaderno = isset($_POST['modo_cuaderno']) ? 1 : 0;
+        $ordenes      = $_POST['orden'] ?? [];
+        $infoIndividual = (int)($_POST['info_individual'] ?? 0);
+        $titulos      = $_POST['titulo_individual'] ?? [];
+        $descripciones = $_POST['descripcion_individual'] ?? [];
+        $links        = $_POST['link_individual'] ?? [];
 
         if ($errors) {
             view('admin/recursos/create', ['pageTitle' => 'Nuevo recurso', 'errors' => $errors, 'old' => $data]);
@@ -34,18 +40,32 @@ final class ResourceController //
         }
 
         $stmt = $this->db->prepare(
-            'INSERT INTO fm_recursos (nombre, descripcion, tipo, archivo, link, created_at)
-             VALUES (:nombre, :descripcion, :tipo, :archivo, :link, NOW())'
+            'INSERT INTO fm_recursos (nombre, descripcion, tipo, archivo, link, modo_cuaderno, orden, created_at)
+             VALUES (:nombre, :descripcion, :tipo, :archivo, :link, :modo_cuaderno, :orden, NOW())'
         );
 
-        foreach ($files as $file) {
+        foreach ($files as $i => $file) {
             $filePath = $this->handleUpload($file, $data['tipo']);
+            $orden    = $modoCuaderno ? (int)($ordenes[$i] ?? $i + 1) : null;
+
+            if ($infoIndividual) {
+                $nombre      = trim($titulos[$i] ?? '') ?: $data['nombre'];
+                $descripcion = trim($descripciones[$i] ?? '') ?: $data['descripcion'];
+                $link        = trim($links[$i] ?? '') ?: $data['link'];
+            } else {
+                $nombre      = $data['nombre'];
+                $descripcion = $data['descripcion'];
+                $link        = $data['link'];
+            }
+
             $stmt->execute([
-                ':nombre'      => $data['nombre'],
-                ':descripcion' => $data['descripcion'],
-                ':tipo'        => $data['tipo'],
-                ':archivo'     => $filePath,
-                ':link'        => $data['link'],
+                ':nombre'        => $nombre,
+                ':descripcion'   => $descripcion,
+                ':tipo'          => $data['tipo'],
+                ':archivo'       => $filePath,
+                ':link'          => $link,
+                ':modo_cuaderno' => $modoCuaderno,
+                ':orden'         => $orden,
             ]);
         }
 
