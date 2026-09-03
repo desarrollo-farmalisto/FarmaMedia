@@ -189,10 +189,11 @@ final class ResourceController //
         $errors = [];
 
         if ($data['nombre'] === '') $errors['nombre'] = 'El nombre es obligatorio.';
+        if ($data['descripcion'] === '') $errors['descripcion'] = 'La descripción es obligatoria.';
         if (!array_key_exists($data['tipo'], ALLOWED_EXTENSIONS)) $errors['tipo'] = 'Selecciona un tipo válido.';
 
         if (!$editing && empty($files)) {
-            $errors['archivo'] = 'Debes subir al menos un archivo.';
+            $errors['archivo'] = 'No se recibieron archivos. Verifica que el archivo no supere el límite permitido por el servidor.';
         } else {
             $allowed = ALLOWED_EXTENSIONS[$data['tipo']] ?? [];
             foreach ($files as $file) {
