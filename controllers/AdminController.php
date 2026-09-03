@@ -16,15 +16,32 @@ final class AdminController //
         $offset    = ($pagina - 1) * $porPagina;
         $totalPags = (int)ceil((int)$total / $porPagina);
 
-        $ultimos = $db->query(
-            'SELECT r.*, a.nombre, a.descripcion, a.archivo, a.link, COUNT(c.id) AS total_comentarios
+        // Recursos modo cuaderno: 1 fila por recurso (primer archivo)
+        $cuadernos = $db->query(
+            'SELECT r.*, a.nombre, a.descripcion, a.archivo, a.link, COUNT(DISTINCT c.id) AS total_comentarios
              FROM fm_recursos r
              LEFT JOIN fm_archivos a ON a.id = (SELECT id FROM fm_archivos WHERE recurso_id = r.id ORDER BY id ASC LIMIT 1)
              LEFT JOIN fm_comments c ON c.fm_recurso_id = r.id AND c.status = 1
+             WHERE r.modo_cuaderno = 1
              GROUP BY r.id, a.nombre, a.descripcion, a.archivo, a.link
              ORDER BY r.created_at DESC
              LIMIT ' . $porPagina . ' OFFSET ' . $offset
         )->fetchAll();
+
+        // Recursos normales: 1 fila por archivo
+        $normales = $db->query(
+            'SELECT r.id, r.tipo, r.modo_cuaderno, r.created_at, a.id AS archivo_id, a.nombre, a.descripcion, a.archivo, a.link, COUNT(DISTINCT c.id) AS total_comentarios
+             FROM fm_recursos r
+             LEFT JOIN fm_archivos a ON a.recurso_id = r.id
+             LEFT JOIN fm_comments c ON c.fm_recurso_id = r.id AND c.status = 1
+             WHERE r.modo_cuaderno = 0
+             GROUP BY r.id, a.id
+             ORDER BY r.created_at DESC, a.id ASC
+             LIMIT ' . $porPagina . ' OFFSET ' . $offset
+        )->fetchAll();
+
+        $ultimos = array_merge($cuadernos, $normales);
+        usort($ultimos, fn($a, $b) => strtotime($b['created_at']) - strtotime($a['created_at']));
 
         view('admin/index', [
             'pageTitle'  => 'Panel de control',

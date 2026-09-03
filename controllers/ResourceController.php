@@ -13,12 +13,25 @@ final class ResourceController //
 
     public function index(): void
     {
-        $recursos = $this->db->query(
+        $cuadernos = $this->db->query(
             'SELECT r.*, a.nombre, a.descripcion, a.archivo, a.link
              FROM fm_recursos r
              LEFT JOIN fm_archivos a ON a.id = (SELECT id FROM fm_archivos WHERE recurso_id = r.id ORDER BY id ASC LIMIT 1)
+             WHERE r.modo_cuaderno = 1
              ORDER BY r.created_at DESC'
         )->fetchAll();
+
+        $normales = $this->db->query(
+            'SELECT r.id, r.tipo, r.modo_cuaderno, r.created_at, a.id AS archivo_id, a.nombre, a.descripcion, a.archivo, a.link
+             FROM fm_recursos r
+             LEFT JOIN fm_archivos a ON a.recurso_id = r.id
+             WHERE r.modo_cuaderno = 0
+             ORDER BY r.created_at DESC, a.id ASC'
+        )->fetchAll();
+
+        $recursos = array_merge($cuadernos, $normales);
+        usort($recursos, fn($a, $b) => strtotime($b['created_at']) - strtotime($a['created_at']));
+
         view('admin/recursos/index', ['pageTitle' => 'Recursos', 'recursos' => $recursos]);
     }
 
