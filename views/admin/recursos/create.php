@@ -28,7 +28,7 @@
                 </div>
 
                 <div class="form-group <?= isset($errors['descripcion']) ? 'has-error' : '' ?>">
-                    <label for="descripcion">Descripción</label>
+                    <label for="descripcion">Descripción <span class="optional">(opcional)</span></label>
                     <textarea id="descripcion" name="descripcion" class="form-input" rows="3"
                               placeholder="Describe brevemente el recurso"><?= htmlspecialchars($old['descripcion'] ?? '') ?></textarea>
                     <?php if (isset($errors['descripcion'])): ?>

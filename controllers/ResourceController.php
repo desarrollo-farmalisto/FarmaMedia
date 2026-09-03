@@ -189,7 +189,6 @@ final class ResourceController //
         $errors = [];
 
         if ($data['nombre'] === '') $errors['nombre'] = 'El nombre es obligatorio.';
-        if ($data['descripcion'] === '') $errors['descripcion'] = 'La descripción es obligatoria.';
         if (!array_key_exists($data['tipo'], ALLOWED_EXTENSIONS)) $errors['tipo'] = 'Selecciona un tipo válido.';
 
         if (!$editing && empty($files)) {
