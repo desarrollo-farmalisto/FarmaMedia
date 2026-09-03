@@ -109,17 +109,14 @@ if (cuadernoToggle) {
 }
 
 if (fileInput) {
-    fileInput.addEventListener('change', () => {
+    const onFileChange = () => {
         const hasFiles = fileInput.files && fileInput.files.length > 0;
 
-        // Mostrar u ocultar el toggle
         if (cuadernoGroup) cuadernoGroup.style.display = hasFiles ? 'block' : 'none';
 
-        // Mostrar u ocultar el boton info individual
         const infoGroup = document.getElementById('info-individual-group');
         if (infoGroup) infoGroup.style.display = hasFiles ? 'block' : 'none';
 
-        // Si info individual estaba activo, regenerar
         const infoIndividual = document.getElementById('info_individual');
         if (infoIndividual && infoIndividual.value === '1') buildInfoList();
 
@@ -132,7 +129,10 @@ if (fileInput) {
                 buildOrdenList();
             }
         }
-    });
+    };
+
+    fileInput.addEventListener('change', onFileChange);
+    fileInput.addEventListener('input', onFileChange);
 }
 
 // ── Info individual ─────────────────────────────────────
