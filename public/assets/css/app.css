@@ -97,7 +97,7 @@ h1, h2, h3 { font-family: var(--font-head); font-weight: 700; }
 }
 
 .hero-section h1 {
-    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-size: clamp(1.6rem, 5vw, 4rem);
     line-height: 1.1;
     margin-bottom: 1.25rem;
 }
@@ -585,14 +585,16 @@ select.form-input { appearance: none; background-image: url("data:image/svg+xml,
 
 @media (max-width: 768px) {
     .pub-card { flex-direction: column; }
-    .pub-media { width: 100%; height: 160px; min-height: unset; }
+    .pub-media { width: 100%; height: 140px; min-height: unset; }
     .pub-card-header { padding: .75rem 1rem .4rem; gap: .3rem; }
-    .pub-title { font-size: 1.05rem; }
-    .pub-desc { font-size: .92rem; padding: .5rem 1rem 0; }
-    .pub-link { font-size: .88rem; padding: .4rem 1rem 0; }
+    .pub-title { font-size: 1rem; }
+    .pub-desc { font-size: .9rem; padding: .5rem 1rem 0; }
+    .pub-link { font-size: .85rem; padding: .4rem 1rem 0; }
     .pub-comment-box { padding: .75rem 1rem 1rem; }
     .badge-type { font-size: .78rem; }
-    .pub-date { font-size: .82rem; }
+    .pub-date { font-size: .8rem; }
+    .hero-section { padding: 2rem 0 2rem; }
+    .eyebrow { font-size: .72rem; }
 }
 
 .pub-video,
@@ -903,7 +905,11 @@ select.form-input { appearance: none; background-image: url("data:image/svg+xml,
 
 @media (max-width: 768px) {
     .cuaderno-slide.active { flex-direction: column; }
-    .cuaderno-media-wrap { width: 100%; min-height: 180px; }
+    .cuaderno-media-wrap { width: 100%; min-height: unset; height: 160px; max-height: 160px; }
+    .cuaderno-info { padding: .85rem 1rem; font-size: .88rem; }
+    .cuaderno-info-header { gap: .2rem; margin-bottom: .5rem; }
+    .cuaderno-book { min-height: unset; }
+    .cuaderno-pages { min-height: unset; }
     .cuaderno-arrow { display: none; }
 }
 

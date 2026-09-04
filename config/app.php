@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 const APP_NAME = 'Farmalisto';
-const APP_VERSION = '1.0.0';
+const APP_VERSION = '1.0.3';
 
 // Local URL
 // const APP_URL  = 'http://farmamedia.test';
