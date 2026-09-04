@@ -523,7 +523,7 @@ select.form-input { appearance: none; background-image: url("data:image/svg+xml,
 
 .pub-section .row { row-gap: 2.5rem; }
 
-@media (max-width: 576px) {
+@media (max-width: 768px) {
     .pub-section .container { padding-left: 4%; padding-right: 4%; }
 }
 
@@ -583,9 +583,13 @@ select.form-input { appearance: none; background-image: url("data:image/svg+xml,
     min-width: 0;
 }
 
-@media (max-width: 576px) {
+@media (max-width: 768px) {
     .pub-card { flex-direction: column; }
-    .pub-media { width: 100%; height: 220px; min-height: unset; }
+    .pub-media { width: 100%; height: 200px; min-height: unset; }
+    .pub-card-header { padding: .75rem 1rem .4rem; }
+    .pub-desc { padding: .5rem 1rem 0; }
+    .pub-link { padding: .4rem 1rem 0; }
+    .pub-comment-box { padding: .75rem 1rem 1rem; }
 }
 
 .pub-video,
@@ -894,9 +898,9 @@ select.form-input { appearance: none; background-image: url("data:image/svg+xml,
 
 .cuaderno-dot.active { background: var(--accent); }
 
-@media (max-width: 576px) {
+@media (max-width: 768px) {
     .cuaderno-slide.active { flex-direction: column; }
-    .cuaderno-media-wrap { width: 100%; min-height: 200px; }
+    .cuaderno-media-wrap { width: 100%; min-height: 180px; }
     .cuaderno-arrow { display: none; }
 }
 
