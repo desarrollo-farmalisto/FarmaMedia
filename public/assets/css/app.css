@@ -521,6 +521,12 @@ select.form-input { appearance: none; background-image: url("data:image/svg+xml,
 /* ── Publicaciones home ────────────────────────────────── */
 .pub-section { padding: 3rem 0 5rem; }
 
+.pub-section .row { row-gap: 2.5rem; }
+
+@media (max-width: 576px) {
+    .pub-section .container { padding-left: 4%; padding-right: 4%; }
+}
+
 .pub-empty {
     text-align: center;
     padding: 4rem 0;
@@ -579,7 +585,7 @@ select.form-input { appearance: none; background-image: url("data:image/svg+xml,
 
 @media (max-width: 576px) {
     .pub-card { flex-direction: column; }
-    .pub-media { width: 100%; min-height: 160px; }
+    .pub-media { width: 100%; height: 220px; min-height: unset; }
 }
 
 .pub-video,
