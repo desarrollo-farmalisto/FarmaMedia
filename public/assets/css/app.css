@@ -542,6 +542,7 @@ select.form-input { appearance: none; background-image: url("data:image/svg+xml,
     overflow: hidden;
     display: flex;
     flex-direction: row;
+    align-items: flex-start;
     transition: box-shadow .25s, transform .25s;
 }
 
@@ -571,11 +572,6 @@ select.form-input { appearance: none; background-image: url("data:image/svg+xml,
     flex-shrink: 0;
     width: 220px;
     background: rgba(0,75,86,.05);
-    overflow: hidden;
-    align-self: stretch;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
 .pub-card-body {
@@ -610,6 +606,7 @@ select.form-input { appearance: none; background-image: url("data:image/svg+xml,
     width: 100%;
     height: auto;
     display: block;
+    border-radius: 0;
 }
 
 .pub-play-icon {
@@ -912,7 +909,8 @@ select.form-input { appearance: none; background-image: url("data:image/svg+xml,
 
 @media (max-width: 768px) {
     .cuaderno-slide.active { flex-direction: column; }
-    .cuaderno-media-wrap { width: 100%; min-height: unset; height: 160px; max-height: 160px; }
+    .cuaderno-media-wrap { width: 100%; min-height: unset; height: auto; }
+    .cuaderno-media { height: auto; object-fit: contain; }
     .cuaderno-info { padding: .85rem 1rem; font-size: .88rem; }
     .cuaderno-info-header { gap: .2rem; margin-bottom: .5rem; }
     .cuaderno-book { min-height: unset; }
