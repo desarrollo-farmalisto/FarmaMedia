@@ -809,11 +809,11 @@ select.form-input { appearance: none; background-image: url("data:image/svg+xml,
     width: 220px;
     min-height: 280px;
     background: #000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     overflow: hidden;
 }
+
+
+
 
 .cuaderno-media {
     width: 100%;
@@ -908,17 +908,17 @@ select.form-input { appearance: none; background-image: url("data:image/svg+xml,
 .cuaderno-dot.active { background: var(--accent); }
 
 @media (max-width: 768px) {
-    .cuaderno-slide.active { flex-direction: column; }
-    .cuaderno-media-wrap { width: 100%; min-height: unset; height: auto; }
-    .cuaderno-media { height: auto; object-fit: contain; }
+
+    .cuaderno-slide { height: auto; }
+    .cuaderno-slide.active { flex-direction: column; height: auto; }
+    .cuaderno-pages { min-height: unset; overflow: visible; height: auto; }
+    .cuaderno-media-wrap { width: 100%; min-height: unset; height: auto; overflow: visible; }
+    .cuaderno-media { width: 100%; height: auto !important; object-fit: contain; display: block !important; vertical-align: top; }
+    .cuaderno-book { min-height: unset; overflow: visible; }
     .cuaderno-info { padding: .85rem 1rem; font-size: .88rem; }
     .cuaderno-info-header { gap: .2rem; margin-bottom: .5rem; }
-    .cuaderno-book { min-height: unset; }
-    .cuaderno-pages { min-height: unset; }
     .cuaderno-arrow { display: none; }
 }
-
-/* Info individual */
 .btn-add-info {
     display: inline-flex;
     align-items: center;
